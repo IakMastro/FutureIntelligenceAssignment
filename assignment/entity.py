@@ -7,6 +7,7 @@ class Entity:
     self.__db = TinyDB(db_path)
     self.__Entity = Query()
 
+  # GET /entities/:id
   def on_get(self, req, resp, _id):
     entity = self.__db.search(self.__Entity.id == _id)
     if len(entity) > 0:
@@ -18,6 +19,7 @@ class Entity:
       resp.status = falcon.HTTP_404
       resp.content_type = falcon.MEDIA_TEXT
 
+  # PUT /entities/:id
   def on_put(self, req, resp, _id):
     raw_data = json.load(req.bounded_stream)
     entity = self.__db.search(self.__Entity.id == _id)
@@ -31,6 +33,7 @@ class Entity:
       resp.status = falcon.HTTP_404
       resp.content_type = falcon.MEDIA_TEXT
 
+  # PUT /entities/:id
   def on_delete(self, req, resp, _id):
     entity = self.__db.search(self.__Entity.id == _id)
     if len(entity) > 0:

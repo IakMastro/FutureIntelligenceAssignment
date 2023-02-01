@@ -7,12 +7,14 @@ class Entities:
   def __init__(self, db_path):
     self.__db = TinyDB(db_path)
 
+  # GET /entities
   def on_get(self, req, resp):
     doc = self.__db.all()
     resp.text = json.dumps(doc, ensure_ascii=False)
     resp.status = falcon.HTTP_200
     resp.content_type = falcon.MEDIA_JSON
 
+  # POST /entities
   def on_post(self, req, resp):
     raw_data = json.load(req.bounded_stream)
 

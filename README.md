@@ -101,6 +101,29 @@ def on_post(self, req, resp):
     resp.content_type = falcon.MEDIA_TEXT
 ```
 
+### Error handling
+
+Initially, there was a major problem with TinyDB, it didn't return an error message if the entity existed or not.
+
+This could be solved in two ways, by creating a middleware checks if the entity exists or not (which is the most robust solution) and a simple if/else.
+
+For the sake of simplicity, the solution provided is the latter.
+
+```py
+def on_put(self, req, resp, _id):
+  raw_data = json.load(req.bounded_stream)
+  entity = self.__db.search(self.__Entity.id == _id)
+  if len(entity) > 0:
+    self.__db.update(raw_data, self.__Entity.id == _id)
+    resp.text = "Entity updated"
+    resp.status = falcon.HTTP_200
+    resp.content_type = falcon.MEDIA_TEXT
+  else:
+    resp.text = "No entity found with this ID"
+    resp.status = falcon.HTTP_404
+    resp.content_type = falcon.MEDIA_TEXT
+```
+
 ## How to run
 
 There is an automated script that builds the container and then it runs it.
